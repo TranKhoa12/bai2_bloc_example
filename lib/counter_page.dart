@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'counter_cubit.dart';
 
-// =======================================
+// ========================================
 // PHẦN 1: CUNG CẤP COUNTER CUBIT
-// =======================================
+// ========================================
 
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
@@ -14,110 +14,85 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // BlocProvider tạo và cung cấp CounterCubit
-    // cho các widget con bên trong.
+    // BlocProvider tạo một instance CounterCubit
+    // và cung cấp cho các widget con.
     return BlocProvider(
-      create: (context) => CounterCubit(),
+      create: (_) => CounterCubit(),
 
-      // Chuyển sang widget hiển thị giao diện.
+      // CounterView là widget con sử dụng CounterCubit.
       child: const CounterView(),
     );
   }
 }
 
 
-// =======================================
+// ========================================
 // PHẦN 2: XÂY DỰNG GIAO DIỆN
-// =======================================
+// ========================================
 
 class CounterView extends StatelessWidget {
   const CounterView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
 
-      // Thanh tiêu đề của ứng dụng.
-      appBar: AppBar(
-        title: const Text('BLoC Counter'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-      ),
+    return Scaffold(
 
       // Nội dung chính của màn hình.
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
 
-          children: [
+        // BlocBuilder lắng nghe thay đổi của CounterCubit.
+        // Khi trạng thái thay đổi, giao diện được xây dựng lại.
+        child: BlocBuilder<CounterCubit, int>(
+          builder: (context, state) {
 
-            const Text(
-              'Giá trị bộ đếm:',
-              style: TextStyle(fontSize: 20),
-            ),
-
-            const SizedBox(height: 15),
-
-            // BlocBuilder lắng nghe CounterCubit.
-            // Khi trạng thái thay đổi, builder chạy lại
-            // để cập nhật giá trị bộ đếm trên giao diện.
-            BlocBuilder<CounterCubit, int>(
-              builder: (context, state) {
-
-                // state là giá trị hiện tại của bộ đếm.
-                return Text(
-                  '$state',
-                  style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                );
-
-              },
-            ),
-          ],
+            // Hiển thị giá trị trạng thái hiện tại.
+            return Text(
+              '$state',
+              style: const TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
         ),
       ),
 
-      // ===================================
+      // ====================================
       // HAI NÚT TĂNG VÀ GIẢM GIÁ TRỊ
-      // ===================================
+      // ====================================
 
       floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
 
         children: [
 
-          // Nút tăng giá trị bộ đếm.
+          // Nút tăng số đếm.
           FloatingActionButton(
             heroTag: 'btnTang',
 
-            // Truy cập CounterCubit và gọi hàm increment().
-            onPressed: () {
-              context.read<CounterCubit>().increment();
-            },
+            // Lấy CounterCubit và gọi phương thức increment().
+            onPressed: () =>
+                context.read<CounterCubit>().increment(),
 
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
             child: const Icon(Icons.add),
           ),
 
+          // Tạo khoảng cách giữa hai nút.
           const SizedBox(height: 10),
 
-          // Nút giảm giá trị bộ đếm.
+          // Nút giảm số đếm.
           FloatingActionButton(
             heroTag: 'btnGiam',
 
-            // Truy cập CounterCubit và gọi hàm decrement().
-            onPressed: () {
-              context.read<CounterCubit>().decrement();
-            },
+            // Lấy CounterCubit và gọi phương thức decrement().
+            onPressed: () =>
+                context.read<CounterCubit>().decrement(),
 
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
             child: const Icon(Icons.remove),
           ),
+
         ],
       ),
     );

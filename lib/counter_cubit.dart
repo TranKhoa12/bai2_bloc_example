@@ -1,26 +1,24 @@
 
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc/bloc.dart';
 
-// =======================================
+// ========================================
 // LỚP QUẢN LÝ TRẠNG THÁI COUNTER
-// =======================================
+// ========================================
 
-// Cubit<int>: Quản lý trạng thái có kiểu dữ liệu int.
+// CounterCubit kế thừa Cubit<int>
+// để quản lý trạng thái số nguyên của bộ đếm.
 class CounterCubit extends Cubit<int> {
 
-  // Khởi tạo giá trị ban đầu của bộ đếm bằng 0.
+  // Khởi tạo trạng thái ban đầu bằng 0.
   CounterCubit() : super(0);
 
-  // Hàm tăng giá trị bộ đếm.
-  void increment() {
-    // state: Giá trị hiện tại của bộ đếm.
-    // emit(): Phát ra trạng thái mới.
-    emit(state + 1);
-  }
+  // Phương thức tăng giá trị bộ đếm.
+  void increment() => emit(state + 1);
 
-  // Hàm giảm giá trị bộ đếm.
-  void decrement() {
-    // Phát ra trạng thái mới, giảm đi 1.
-    emit(state - 1);
-  }
+  // Phương thức giảm giá trị bộ đếm.
+  void decrement() => emit(state - 1);
+
+  // Chú thích:
+  // state: Lấy giá trị trạng thái hiện tại.
+  // emit(): Phát ra trạng thái mới.
 }
